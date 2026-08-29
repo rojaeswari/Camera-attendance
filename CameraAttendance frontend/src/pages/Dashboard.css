@@ -1,0 +1,35 @@
+.dashboard-page {
+    min-height: 100vh;
+    padding: 40px;
+    background: #f5f7fb;
+}
+
+.dashboard-page h1 {
+    margin-bottom: 30px;
+    font-size: 32px;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.dashboard-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-card h3 {
+    margin: 0 0 15px;
+    font-size: 16px;
+    color: #666;
+}
+
+.dashboard-card p {
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+}

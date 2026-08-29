@@ -1,0 +1,221 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\cctv attendance\\CameraAttendance\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\responcedto\\responcedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\responcedto\\responcedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\responcedto\\registerdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\responcedto\\registerdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\responcedto\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\responcedto\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\context\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\context\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\interface\\iauth.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\interface\\iauth.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|d:\\cctv attendance\\cameraattendance\\cameraattendance\\cameraattendance.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2B6C38F9-1A77-75D0-43E6-770DBF95191F}|CameraAttendance\\CameraAttendance.csproj|solutionrelative:cameraattendance\\cameraattendance.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "CameraAttendance\\Controllers\\UsersController.cs",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "CameraAttendance\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAwwC4AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T10:47:41.58Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "LoginDTO.cs",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\ResponceDTO\\LoginDTO.cs",
+              "RelativeDocumentMoniker": "CameraAttendance\\ResponceDTO\\LoginDTO.cs",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\ResponceDTO\\LoginDTO.cs",
+              "RelativeToolTip": "CameraAttendance\\ResponceDTO\\LoginDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T06:09:09.551Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "RegisterDTO.cs",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\ResponceDTO\\RegisterDTO.cs",
+              "RelativeDocumentMoniker": "CameraAttendance\\ResponceDTO\\RegisterDTO.cs",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\ResponceDTO\\RegisterDTO.cs",
+              "RelativeToolTip": "CameraAttendance\\ResponceDTO\\RegisterDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T06:06:33.254Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Authservice.cs",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Services\\Authservice.cs",
+              "RelativeDocumentMoniker": "CameraAttendance\\Services\\Authservice.cs",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Services\\Authservice.cs",
+              "RelativeToolTip": "CameraAttendance\\Services\\Authservice.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAADwvx8AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T05:05:01.556Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IAuth.cs",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\interface\\IAuth.cs",
+              "RelativeDocumentMoniker": "CameraAttendance\\interface\\IAuth.cs",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\interface\\IAuth.cs",
+              "RelativeToolTip": "CameraAttendance\\interface\\IAuth.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T05:01:13.588Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "CameraAttendance\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "CameraAttendance\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABIAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T04:45:48.329Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ResponceDTO.cs",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\ResponceDTO\\ResponceDTO.cs",
+              "RelativeDocumentMoniker": "CameraAttendance\\ResponceDTO\\ResponceDTO.cs",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\ResponceDTO\\ResponceDTO.cs",
+              "RelativeToolTip": "CameraAttendance\\ResponceDTO\\ResponceDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T04:36:56.463Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Program.cs",
+              "RelativeDocumentMoniker": "CameraAttendance\\Program.cs",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Program.cs",
+              "RelativeToolTip": "CameraAttendance\\Program.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAC4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-29T04:27:09.096Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\appsettings.json",
+              "RelativeDocumentMoniker": "CameraAttendance\\appsettings.json",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\appsettings.json",
+              "RelativeToolTip": "CameraAttendance\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-08-28T12:19:34.404Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Context\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "CameraAttendance\\Context\\AppDbContext.cs",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Context\\AppDbContext.cs",
+              "RelativeToolTip": "CameraAttendance\\Context\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-28T12:09:19.206Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserModel.cs",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Models\\UserModel.cs",
+              "RelativeDocumentMoniker": "CameraAttendance\\Models\\UserModel.cs",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\Models\\UserModel.cs",
+              "RelativeToolTip": "CameraAttendance\\Models\\UserModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-28T09:47:06.061Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CameraAttendance.csproj",
+              "DocumentMoniker": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\CameraAttendance.csproj",
+              "RelativeDocumentMoniker": "CameraAttendance\\CameraAttendance.csproj",
+              "ToolTip": "D:\\cctv attendance\\CameraAttendance\\CameraAttendance\\CameraAttendance.csproj",
+              "RelativeToolTip": "CameraAttendance\\CameraAttendance.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-08-28T09:44:20.983Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

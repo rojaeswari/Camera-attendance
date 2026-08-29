@@ -1,0 +1,81 @@
+.users-page {
+    min-height: 100vh;
+    padding: 40px;
+    background: #f5f7fb;
+}
+
+.users-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.users-header h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+.users-header p {
+    margin-top: 8px;
+    color: #777;
+}
+
+.add-user-btn {
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.users-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+}
+
+.users-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-card th,
+.users-card td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.users-card th {
+    font-size: 14px;
+    color: #666;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status.active {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status.inactive {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.loading,
+.no-users {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+}
