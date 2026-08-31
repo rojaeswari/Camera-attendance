@@ -1,0 +1,166 @@
+/* =========================================
+   ATTENDANCE PAGE
+========================================= */
+
+.attendance-page {
+    min-height: 100vh;
+    padding: 35px 45px;
+    background: #f4f7fb;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.attendance-header {
+    margin-bottom: 28px;
+}
+
+.attendance-header h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.attendance-header p {
+    margin: 7px 0 0;
+    font-size: 14px;
+    color: #64748b;
+}
+
+
+/* =========================================
+   ATTENDANCE CARD
+========================================= */
+
+.attendance-card {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+    overflow: hidden;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.attendance-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-card th {
+    background: #f8fafc;
+    padding: 16px 20px;
+
+    text-align: left;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #64748b;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.attendance-card td {
+    padding: 17px 20px;
+
+    font-size: 14px;
+
+    color: #334155;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.attendance-card tbody tr {
+    transition: 0.2s;
+}
+
+.attendance-card tbody tr:hover {
+    background: #f8fafc;
+}
+
+.attendance-card tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================
+   USER NAME
+========================================= */
+
+.user-name {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.attendance-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 5px 12px;
+
+    border-radius: 20px;
+
+    background: #dcfce7;
+
+    color: #15803d;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   LOADING / EMPTY
+========================================= */
+
+.loading,
+.no-attendance {
+    text-align: center;
+
+    padding: 50px;
+
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .attendance-page {
+        padding: 25px 18px;
+    }
+
+    .attendance-header h1 {
+        font-size: 25px;
+    }
+
+    .attendance-card {
+        overflow-x: auto;
+    }
+
+    .attendance-card table {
+        min-width: 700px;
+    }
+}

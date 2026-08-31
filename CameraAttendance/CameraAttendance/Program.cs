@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IAuth, Authservice>();
 builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer( builder.Configuration.GetConnectionString("DefaultConnection")));
+// FTP Image Service
+builder.Services.AddScoped<FtpImageService>();
 
 // Add services to the container.
 
@@ -37,10 +39,21 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("ReactPolicy");
 app.UseStaticFiles();
+
 //app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+// FTP IMAGE TEST
+using (var scope = app.Services.CreateScope())
+{
+    var ftpService = scope.ServiceProvider
+        .GetRequiredService<FtpImageService>();
+
+    ftpService.ProcessImages();
+}
+
 
 app.Run();

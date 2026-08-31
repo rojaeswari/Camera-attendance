@@ -12,5 +12,9 @@ namespace CameraAttendance.Data
 
         public DbSet<UserModel> Users { get; set; }
 
+        public DbSet<AttendanceModel> Attendance { get; set; }
+
+        public DbSet<CameraModel> Cameras { get; set; }
+
     }
 }
