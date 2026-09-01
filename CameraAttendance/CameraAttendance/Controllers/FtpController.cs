@@ -7,22 +7,66 @@ namespace CameraAttendance.Controllers
     [ApiController]
     public class FtpController : ControllerBase
     {
-        private readonly FtpImageService _ftpImageService;
+        //private readonly FtpImageService _ftpImageService;
 
-        public FtpController(FtpImageService ftpImageService)
+        //public FtpController(FtpImageService ftpImageService)
+        //{
+        //    _ftpImageService = ftpImageService;
+        //}
+
+        //[HttpGet("process-images")]
+        //public IActionResult ProcessImages()
+        //{
+        //    var result = _ftpImageService.ProcessImages();
+
+        //    return Ok(new
+        //    {
+        //        success = true,
+        //        message = result
+        //    });
+        //}
+
+        private readonly IWebHostEnvironment _environment;
+
+        public FtpController(IWebHostEnvironment environment)
         {
-            _ftpImageService = ftpImageService;
+            _environment = environment;
         }
 
-        [HttpGet("process-images")]
-        public IActionResult ProcessImages()
+        [HttpPost("save-image")]
+        public IActionResult SaveImage(string fileName)
         {
-            var result = _ftpImageService.ProcessImages();
+            string sourceFolder = @"D:\ftpserver\Picture\Face Recognition";
+
+            string destinationFolder = Path.Combine(
+                _environment.WebRootPath,
+                "FaceRecognition"
+            );
+
+            if (!Directory.Exists(destinationFolder))
+            {
+                Directory.CreateDirectory(destinationFolder);
+            }
+
+            string sourcePath = Path.Combine(sourceFolder, fileName);
+            string destinationPath = Path.Combine(destinationFolder, fileName);
+
+            if (!System.IO.File.Exists(sourcePath))
+            {
+                return NotFound("Image not found in FTP folder");
+            }
+
+            System.IO.File.Copy(
+                sourcePath,
+                destinationPath,
+                true
+            );
 
             return Ok(new
             {
-                success = true,
-                message = result
+                message = "Image saved successfully",
+                fileName = fileName,
+                path = $"/FaceRecognition/{fileName}"
             });
         }
     }

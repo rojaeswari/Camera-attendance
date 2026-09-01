@@ -20,28 +20,34 @@ namespace CameraAttendance.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAttendance()
         {
-            var attendance = await _context.Attendance
-                .Include(a => a.User)
-                .OrderByDescending(a => a.AttendanceDate)
-                .ThenByDescending(a => a.AttendanceTime)
-                .Select(a => new
-                {
-                    a.Id,
-                    a.UserId,
-                    UserName = a.User!.Name,
-                    a.AttendanceDate,
-                    a.AttendanceTime,
-                    a.CameraName,
-                    a.Status,
-                    a.CreatedAt
-                })
-                .ToListAsync();
-
-            return Ok(new
+            try
             {
-                success = true,
-                data = attendance
-            });
+                var attendance = await _context.Attendance
+                    .OrderByDescending(a => a.AttendanceTime)
+                    .Select(a => new
+                    {
+                        a.AttendanceId,
+                        a.UserId,
+                        a.UserName,
+                        a.AttendanceTime,
+                        a.ImagePath
+                    })
+                    .ToListAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    data = attendance
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
         }
 
 
@@ -52,7 +58,7 @@ namespace CameraAttendance.Controllers
         {
             try
             {
-                // Check user
+                // Check User
                 var user = await _context.Users
                     .FirstOrDefaultAsync(u => u.Id == request.UserId);
 
@@ -65,13 +71,16 @@ namespace CameraAttendance.Controllers
                     });
                 }
 
-                var today = DateTime.UtcNow.Date;
+                // Current date
+                var today = DateTime.Now.Date;
+                var tomorrow = today.AddDays(1);
 
                 // Check already marked today
                 var alreadyMarked = await _context.Attendance
                     .AnyAsync(a =>
                         a.UserId == request.UserId &&
-                        a.AttendanceDate == today);
+                        a.AttendanceTime >= today &&
+                        a.AttendanceTime < tomorrow);
 
                 if (alreadyMarked)
                 {
@@ -82,14 +91,13 @@ namespace CameraAttendance.Controllers
                     });
                 }
 
+                // Create Attendance
                 var attendance = new AttendanceModel
                 {
-                    UserId = request.UserId,
-                    AttendanceDate = today,
-                    AttendanceTime = DateTime.UtcNow.TimeOfDay,
-                    CameraName = request.CameraName,
-                    Status = "Present",
-                    CreatedAt = DateTime.UtcNow
+                    UserId = user.Id,
+                    UserName = user.Name,
+                    AttendanceTime = DateTime.Now,
+                    ImagePath = request.ImagePath
                 };
 
                 _context.Attendance.Add(attendance);
@@ -100,7 +108,14 @@ namespace CameraAttendance.Controllers
                 {
                     success = true,
                     message = "Attendance marked successfully",
-                    data = attendance.Id
+                    data = new
+                    {
+                        attendance.AttendanceId,
+                        attendance.UserId,
+                        attendance.UserName,
+                        attendance.AttendanceTime,
+                        attendance.ImagePath
+                    }
                 });
             }
             catch (Exception ex)
@@ -115,10 +130,11 @@ namespace CameraAttendance.Controllers
     }
 
 
+    // Request Model
     public class AttendanceRequest
     {
         public int UserId { get; set; }
 
-        public string? CameraName { get; set; }
+        public string? ImagePath { get; set; }
     }
 }

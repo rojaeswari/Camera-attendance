@@ -21,39 +21,45 @@ namespace CameraAttendance.Controllers
         {
             try
             {
-                var today = DateTime.UtcNow.Date;
+                // Today start
+                var today = DateTime.Now.Date;
 
-                // Total users
-                var totalUsers = await _context.Users.CountAsync();
+                // Tomorrow start
+                var tomorrow = today.AddDays(1);
 
-                // Today's attendance
+                // Total Users
+                var totalUsers = await _context.Users
+                    .CountAsync();
+
+                // Today's Attendance
                 var todayAttendance = await _context.Attendance
-                    .CountAsync(a => a.AttendanceDate == today);
+                    .CountAsync(a =>
+                        a.AttendanceTime >= today &&
+                        a.AttendanceTime < tomorrow
+                    );
 
-                // Present count
+                // Present Count
                 var present = await _context.Attendance
                     .CountAsync(a =>
-                        a.AttendanceDate == today &&
-                        a.Status == "Present");
+                        a.AttendanceTime >= today &&
+                        a.AttendanceTime < tomorrow
+                    );
 
-                // Active cameras
+                // Active Cameras
                 var activeCameras = await _context.Cameras
                     .CountAsync(c => c.Status == "Active");
 
-                // Recent attendance
+                // Recent Attendance
                 var recentAttendance = await _context.Attendance
-                    .Include(a => a.User)
-                    .OrderByDescending(a => a.AttendanceDate)
-                    .ThenByDescending(a => a.AttendanceTime)
+                    .OrderByDescending(a => a.AttendanceTime)
                     .Take(5)
                     .Select(a => new
                     {
-                        a.Id,
-                        UserName = a.User!.Name,
-                        a.AttendanceDate,
+                        a.AttendanceId,
+                        a.UserId,
+                        a.UserName,
                         a.AttendanceTime,
-                        a.CameraName,
-                        a.Status
+                        a.ImagePath
                     })
                     .ToListAsync();
 

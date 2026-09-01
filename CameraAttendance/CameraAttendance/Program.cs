@@ -11,6 +11,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer( buil
 // FTP Image Service
 builder.Services.AddScoped<FtpImageService>();
 
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -29,6 +30,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+// FTP Image Watcher
+builder.Services.AddHostedService<FtpImageWatcher>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,22 +42,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("ReactPolicy");
-app.UseStaticFiles();
+
 
 //app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseStaticFiles();
+app.UseHttpsRedirection();
 app.MapControllers();
 
-// FTP IMAGE TEST
-using (var scope = app.Services.CreateScope())
-{
-    var ftpService = scope.ServiceProvider
-        .GetRequiredService<FtpImageService>();
+//// FTP IMAGE TEST
+//using (var scope = app.Services.CreateScope())
+//{
+//    var ftpService = scope.ServiceProvider
+//        .GetRequiredService<FtpImageService>();
 
-    ftpService.ProcessImages();
-}
+//    ftpService.ProcessImages();
+//}
 
 
 app.Run();

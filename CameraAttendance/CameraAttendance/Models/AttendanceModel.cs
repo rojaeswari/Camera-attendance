@@ -1,22 +1,23 @@
-﻿namespace CameraAttendance.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CameraAttendance.Models
 {
     public class AttendanceModel
     {
-        public int Id { get; set; }
+        [Key]
+        public int AttendanceId { get; set; }
 
+        
         public int UserId { get; set; }
 
-        public DateTime AttendanceDate { get; set; }
+        [Required]
+        [MaxLength(200)]
+        public string UserName { get; set; } = string.Empty;
 
-        public TimeSpan AttendanceTime { get; set; }
+        [Required]
+        public DateTime AttendanceTime { get; set; }
 
-        public string? CameraName { get; set; }
-
-        public string Status { get; set; } = "Present";
-
-        public DateTime CreatedAt { get; set; }
-
-        // Navigation property
-        public UserModel? User { get; set; }
+        [MaxLength(500)]
+        public string? ImagePath { get; set; }
     }
 }
