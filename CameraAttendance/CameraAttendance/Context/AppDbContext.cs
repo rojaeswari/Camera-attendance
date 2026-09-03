@@ -15,6 +15,7 @@ namespace CameraAttendance.Data
         public DbSet<AttendanceModel> Attendance { get; set; }
 
         public DbSet<CameraModel> Cameras { get; set; }
+        public DbSet<StrangerAttendanceModel> StrangerAttendance { get; set; }
 
     }
 }

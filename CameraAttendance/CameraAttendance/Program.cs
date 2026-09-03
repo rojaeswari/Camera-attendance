@@ -11,6 +11,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer( buil
 // FTP Image Service
 builder.Services.AddScoped<FtpImageService>();
 
+builder.Services.AddSingleton<FaceRecognitionService>();
+
+builder.Services.AddHostedService<FtpImageWatcher>();
+
 
 // Add services to the container.
 

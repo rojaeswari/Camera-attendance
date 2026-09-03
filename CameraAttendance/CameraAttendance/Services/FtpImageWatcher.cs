@@ -7,82 +7,199 @@ namespace CameraAttendance.Services
     public class FtpImageWatcher : BackgroundService
     {
         private readonly IWebHostEnvironment _environment;
+
         private readonly ILogger<FtpImageWatcher> _logger;
+
         private readonly IServiceScopeFactory _scopeFactory;
+
+        private readonly FaceRecognitionService
+            _faceRecognitionService;
 
         private FileSystemWatcher? _watcher;
 
-        // Camera / FTP server folder
+
+        // =========================================================
+        // FTP CAMERA FOLDER
+        // =========================================================
+
         private readonly string _ftpFolder =
             @"D:\ftpserver\Picture\Face Recognition";
 
 
+        // =========================================================
+        // MATCH THRESHOLD
+        // =========================================================
+
+        private const double MATCH_THRESHOLD = 0.42;
+
+
+        // =========================================================
+        // CONSTRUCTOR
+        // =========================================================
+
         public FtpImageWatcher(
             IWebHostEnvironment environment,
+
             ILogger<FtpImageWatcher> logger,
-            IServiceScopeFactory scopeFactory)
+
+            IServiceScopeFactory scopeFactory,
+
+            FaceRecognitionService faceRecognitionService)
         {
-            _environment = environment;
-            _logger = logger;
-            _scopeFactory = scopeFactory;
+            _environment =
+                environment;
+
+            _logger =
+                logger;
+
+            _scopeFactory =
+                scopeFactory;
+
+            _faceRecognitionService =
+                faceRecognitionService;
         }
 
+
+        // =========================================================
+        // START WATCHER
+        // =========================================================
 
         protected override Task ExecuteAsync(
             CancellationToken stoppingToken)
         {
-            // wwwroot/uploads
-            string destinationFolder = Path.Combine(
-                _environment.WebRootPath,
-                "uploads"
-            );
-
-            // Create uploads folder
-            if (!Directory.Exists(destinationFolder))
+            try
             {
-                Directory.CreateDirectory(destinationFolder);
-            }
+                // =================================================
+                // CHECK FTP FOLDER
+                // =================================================
 
-            // Check FTP folder
-            if (!Directory.Exists(_ftpFolder))
-            {
-                _logger.LogError(
-                    "FTP folder not found: {Folder}",
+                if (!Directory.Exists(_ftpFolder))
+                {
+                    _logger.LogError(
+                        "FTP folder not found: {Folder}",
+                        _ftpFolder
+                    );
+
+                    return Task.CompletedTask;
+                }
+
+
+                // =================================================
+                // CREATE REQUIRED FOLDERS
+                // =================================================
+
+                string uploadsFolder =
+                    Path.Combine(
+                        _environment.WebRootPath,
+                        "uploads"
+                    );
+
+
+                string attendanceFolder =
+                    Path.Combine(
+                        uploadsFolder,
+                        "attendance"
+                    );
+
+
+                string facesFolder =
+                    Path.Combine(
+                        uploadsFolder,
+                        "faces"
+                    );
+
+
+                string strangersFolder =
+                    Path.Combine(
+                        uploadsFolder,
+                        "strangers"
+                    );
+
+
+                Directory.CreateDirectory(
+                    uploadsFolder
+                );
+
+                Directory.CreateDirectory(
+                    attendanceFolder
+                );
+
+                Directory.CreateDirectory(
+                    facesFolder
+                );
+
+                Directory.CreateDirectory(
+                    strangersFolder
+                );
+
+
+                // =================================================
+                // FILE SYSTEM WATCHER
+                // =================================================
+
+                _watcher =
+                    new FileSystemWatcher(
+                        _ftpFolder
+                    );
+
+
+                _watcher.Filter =
+                    "*.*";
+
+
+                _watcher.NotifyFilter =
+                    NotifyFilters.FileName |
+                    NotifyFilters.LastWrite |
+                    NotifyFilters.Size;
+
+
+                // =================================================
+                // NEW FILE
+                // =================================================
+
+                _watcher.Created += async (
+                    sender,
+                    e) =>
+                {
+                    await ProcessNewImage(
+                        e.FullPath
+                    );
+                };
+
+
+                // =================================================
+                // START
+                // =================================================
+
+                _watcher.EnableRaisingEvents =
+                    true;
+
+
+                _logger.LogInformation(
+                    "========================================"
+                );
+
+                _logger.LogInformation(
+                    "FTP IMAGE WATCHER STARTED"
+                );
+
+                _logger.LogInformation(
+                    "FTP Folder: {Folder}",
                     _ftpFolder
                 );
 
-                return Task.CompletedTask;
+                _logger.LogInformation(
+                    "========================================"
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Failed to start FTP watcher"
+                );
             }
 
-            _watcher = new FileSystemWatcher();
-
-            _watcher.Path = _ftpFolder;
-
-            _watcher.Filter = "*.*";
-
-            _watcher.NotifyFilter =
-                NotifyFilters.FileName |
-                NotifyFilters.LastWrite |
-                NotifyFilters.Size;
-
-
-            // New image detected
-            _watcher.Created += async (sender, e) =>
-            {
-                await ProcessNewImage(
-                    e.FullPath,
-                    destinationFolder
-                );
-            };
-
-
-            _watcher.EnableRaisingEvents = true;
-
-
-            _logger.LogInformation(
-                "FTP Image Watcher started: {Folder}",
-                _ftpFolder
-            );
 
             return Task.CompletedTask;
         }
@@ -93,58 +210,76 @@ namespace CameraAttendance.Services
         // =========================================================
 
         private async Task ProcessNewImage(
-            string sourceFile,
-            string destinationFolder)
+            string sourceFile)
         {
             try
             {
-                // Wait until FTP upload is completed
-                await WaitForFile(sourceFile);
+                _logger.LogInformation(
+                    "========================================"
+                );
+
+                _logger.LogInformation(
+                    "NEW CAMERA IMAGE"
+                );
+
+                _logger.LogInformation(
+                    "Source: {File}",
+                    sourceFile
+                );
+
+                _logger.LogInformation(
+                    "========================================"
+                );
+
+
+                // =================================================
+                // WAIT UNTIL FTP FINISHES UPLOAD
+                // =================================================
+
+                await WaitForFile(
+                    sourceFile
+                );
+
+
+                // =================================================
+                // CHECK EXTENSION
+                // =================================================
 
                 string extension =
-                    Path.GetExtension(sourceFile).ToLower();
+                    Path.GetExtension(
+                        sourceFile
+                    ).ToLowerInvariant();
+
 
                 if (extension != ".jpg" &&
                     extension != ".jpeg" &&
                     extension != ".png")
                 {
+                    _logger.LogWarning(
+                        "Unsupported image: {File}",
+                        sourceFile
+                    );
+
                     return;
                 }
 
 
-                string fileName =
-                    Path.GetFileName(sourceFile);
+                // =================================================
+                // DIRECTLY PROCESS FTP IMAGE
+                //
+                // IMPORTANT:
+                // We DO NOT copy raw image to wwwroot/uploads
+                // =================================================
 
-
-                // Copy image to wwwroot/uploads
-                string destinationFile =
-                    Path.Combine(
-                        destinationFolder,
-                        fileName
-                    );
-
-
-                File.Copy(
-                    sourceFile,
-                    destinationFile,
-                    true
+                await RecognizeFace(
+                    sourceFile
                 );
-
-
-                _logger.LogInformation(
-                    "New face image received: {FileName}",
-                    fileName
-                );
-
-
-                // Face recognition
-                await RecognizeFace(destinationFile);
             }
             catch (Exception ex)
             {
                 _logger.LogError(
                     ex,
-                    "Error processing image: {File}",
+                    "Error processing camera image: {File}",
                     sourceFile
                 );
             }
@@ -152,254 +287,314 @@ namespace CameraAttendance.Services
 
 
         // =========================================================
-        // FACE RECOGNITION
+        // RECOGNIZE FACE
         // =========================================================
 
-        private async Task RecognizeFace(string imagePath)
+        private async Task RecognizeFace(
+            string imagePath)
         {
             try
             {
                 using IServiceScope scope =
                     _scopeFactory.CreateScope();
 
+
                 var context =
                     scope.ServiceProvider
                         .GetRequiredService<AppDbContext>();
 
-                // Get registered users
-                var users = await context.Users
-                    .Where(x => x.FaceImagePath != null)
-                    .ToListAsync();
+
+                // =================================================
+                // GET ACTIVE USERS WITH FACE IMAGE
+                // =================================================
+
+                var users =
+                    await context.Users
+                        .Where(x =>
+                            x.IsActive &&
+                            x.FaceImagePath != null &&
+                            x.FaceImagePath != "")
+                        .ToListAsync();
+
+
+                // =================================================
+                // NO REGISTERED USERS
+                // =================================================
+
+                if (users.Count == 0)
+                {
+                    _logger.LogWarning(
+                        "No registered users found. Saving as Stranger."
+                    );
+
+
+                    await CreateStrangerAttendance(
+                        context,
+                        imagePath,
+                        0
+                    );
+
+
+                    return;
+                }
+
+
+                // =================================================
+                // FIRST CHECK:
+                // CAMERA IMAGE MUST HAVE A FACE
+                // =================================================
+
+                // We use the recognition service itself below.
+                // If no face is detected, all comparisons return 0.
+                // =================================================
+
+
+                UserModel? matchedUser = null;
+
+                double bestSimilarity =
+                    double.MinValue;
+
+                double bestConfidence = 0;
+
+
+                // =================================================
+                // COMPARE WITH EVERY USER
+                // =================================================
 
                 foreach (var user in users)
                 {
-                    if (string.IsNullOrWhiteSpace(user.FaceImagePath))
+                    try
                     {
-                        continue;
-                    }
+                        if (string.IsNullOrWhiteSpace(
+                            user.FaceImagePath))
+                        {
+                            continue;
+                        }
 
-                    string registeredImagePath =
-                        Path.Combine(
-                            _environment.WebRootPath,
+
+                        // =========================================
+                        // CONVERT DB PATH TO PHYSICAL PATH
+                        // =========================================
+
+                        string relativePath =
                             user.FaceImagePath
                                 .TrimStart('/')
                                 .Replace(
                                     "/",
-                                    Path.DirectorySeparatorChar.ToString()
-                                )
+                                    Path.DirectorySeparatorChar
+                                        .ToString()
+                                );
+
+
+                        string registeredImagePath =
+                            Path.Combine(
+                                _environment.WebRootPath,
+                                relativePath
+                            );
+
+
+                        // =========================================
+                        // CHECK REGISTERED IMAGE
+                        // =========================================
+
+                        if (!File.Exists(
+                            registeredImagePath))
+                        {
+                            _logger.LogWarning(
+                                "Registered image not found | User: {Name} | Path: {Path}",
+                                user.Name,
+                                registeredImagePath
+                            );
+
+                            continue;
+                        }
+
+
+                        // =========================================
+                        // FACE RECOGNITION
+                        // =========================================
+
+                        FaceRecognitionResult result =
+                            _faceRecognitionService.Recognize(
+                                imagePath,
+                                registeredImagePath
+                            );
+
+
+                        _logger.LogInformation(
+                            "USER CHECK | User: {Name} | Similarity: {Similarity:F4} | Confidence: {Confidence:F4}",
+                            user.Name,
+                            result.Similarity,
+                            result.FaceConfidence
                         );
 
-                    if (!System.IO.File.Exists(registeredImagePath))
-                    {
-                        continue;
+
+                        // =========================================
+                        // KEEP BEST MATCH
+                        // =========================================
+
+                        if (result.Similarity >
+                            bestSimilarity)
+                        {
+                            bestSimilarity =
+                                result.Similarity;
+
+                            bestConfidence =
+                                result.FaceConfidence;
+
+                            matchedUser =
+                                user;
+                        }
                     }
-
-                    // Compare camera image with registered image
-                    bool isMatch = CompareFaces(
-                        imagePath,
-                        registeredImagePath
-                    );
-
-                    if (isMatch)
+                    catch (Exception ex)
                     {
-                        // USER FOUND
-                        await CreateUserAttendance(
-                            context,
-                            user,
-                            imagePath
+                        _logger.LogError(
+                            ex,
+                            "Error comparing with user: {Name}",
+                            user.Name
                         );
-
-                        return;
                     }
                 }
 
-                // NO USER FOUND
+
+                // =================================================
+                // NO FACE / NO VALID COMPARISON
+                // =================================================
+
+                if (bestSimilarity == double.MinValue)
+                {
+                    _logger.LogWarning(
+                        "No valid face comparison was possible."
+                    );
+
+                    return;
+                }
+
+
+                if (bestSimilarity <= 0)
+                {
+                    _logger.LogWarning(
+                        "No face detected in camera image. Image ignored."
+                    );
+
+                    return;
+                }
+
+
+                // =================================================
+                // FINAL DECISION
+                // =================================================
+
+                bool isMatch =
+                    matchedUser != null &&
+                    bestSimilarity >= MATCH_THRESHOLD;
+
+
+                _logger.LogInformation(
+                    "========================================"
+                );
+
+                _logger.LogInformation(
+                    "FINAL FACE RECOGNITION RESULT"
+                );
+
+                _logger.LogInformation(
+                    "Best User       : {User}",
+                    matchedUser?.Name ?? "None"
+                );
+
+                _logger.LogInformation(
+                    "Best Similarity : {Similarity:F4}",
+                    bestSimilarity
+                );
+
+                _logger.LogInformation(
+                    "Confidence      : {Confidence:F4}",
+                    bestConfidence
+                );
+
+                _logger.LogInformation(
+                    "Threshold       : {Threshold:F2}",
+                    MATCH_THRESHOLD
+                );
+
+                _logger.LogInformation(
+                    "MATCH            : {Match}",
+                    isMatch
+                );
+
+                _logger.LogInformation(
+                    "========================================"
+                );
+
+
+                // =================================================
+                // KNOWN USER
+                // =================================================
+
+                if (isMatch)
+                {
+                    await CreateUserAttendance(
+                        context,
+                        matchedUser!,
+                        imagePath,
+                        bestSimilarity
+                    );
+
+                    return;
+                }
+
+
+                // =================================================
+                // UNKNOWN USER / STRANGER
+                // =================================================
+
                 await CreateStrangerAttendance(
                     context,
-                    imagePath
+                    imagePath,
+                    bestSimilarity
                 );
             }
             catch (Exception ex)
             {
                 _logger.LogError(
                     ex,
-                    "Face recognition failed for {Image}",
+                    "Face recognition failed: {Image}",
                     imagePath
                 );
             }
         }
-        private async Task CreateStrangerAttendance(
-    AppDbContext context,
-    string imagePath)
-        {
-            DateTime now = DateTime.Now;
 
-            string attendanceFolder =
-                Path.Combine(
-                    _environment.WebRootPath,
-                    "uploads",
-                    "attendance"
-                );
 
-            if (!Directory.Exists(attendanceFolder))
-            {
-                Directory.CreateDirectory(attendanceFolder);
-            }
-
-            string fileName =
-                $"Stranger_{now:yyyyMMdd_HHmmss}.jpg";
-
-            string attendanceImage =
-                Path.Combine(
-                    attendanceFolder,
-                    fileName
-                );
-
-            // Save stranger image
-            File.Copy(
-                imagePath,
-                attendanceImage,
-                true
-            );
-
-            var attendance = new AttendanceModel
-            {
-                UserId = 0,
-                UserName = "Stranger",
-                AttendanceTime = now,
-                ImagePath = $"/uploads/attendance/{fileName}"
-            };
-
-            context.Attendance.Add(attendance);
-
-            await context.SaveChangesAsync();
-
-            _logger.LogInformation(
-                "Stranger detected at {Time}",
-                now
-            );
-        }
-
+        // =========================================================
+        // USER ATTENDANCE
+        // =========================================================
 
         private async Task CreateUserAttendance(
-    AppDbContext context,
-    UserModel user,
-    string imagePath)
-        {
-            DateTime now = DateTime.Now;
-
-            // Check duplicate attendance today
-            bool alreadyMarked =
-                await context.Attendance.AnyAsync(x =>
-                    x.UserId == user.Id &&
-                    x.AttendanceTime >= now.Date &&
-                    x.AttendanceTime < now.Date.AddDays(1)
-                );
-
-            if (alreadyMarked)
-            {
-                _logger.LogInformation(
-                    "Attendance already marked for {Name}",
-                    user.Name
-                );
-
-                return;
-            }
-
-            string attendanceFolder =
-                Path.Combine(
-                    _environment.WebRootPath,
-                    "uploads",
-                    "attendance"
-                );
-
-            if (!Directory.Exists(attendanceFolder))
-            {
-                Directory.CreateDirectory(attendanceFolder);
-            }
-
-            string safeName =
-                user.Name.Replace(" ", "_");
-
-            string extension =
-                Path.GetExtension(imagePath);
-
-            if (string.IsNullOrEmpty(extension))
-            {
-                extension = ".jpg";
-            }
-
-            string fileName =
-                $"{safeName}_{now:yyyyMMdd_HHmmss}{extension}";
-
-            string attendanceImage =
-                Path.Combine(
-                    attendanceFolder,
-                    fileName
-                );
-
-            File.Copy(
-                imagePath,
-                attendanceImage,
-                true
-            );
-
-            var attendance = new AttendanceModel
-            {
-                UserId = user.Id,
-                UserName = user.Name,
-                AttendanceTime = now,
-                ImagePath = $"/uploads/attendance/{fileName}"
-            };
-
-            context.Attendance.Add(attendance);
-
-            await context.SaveChangesAsync();
-
-            _logger.LogInformation(
-                "Attendance marked for {Name} at {Time}",
-                user.Name,
-                now
-            );
-        }
-        // =========================================================
-        // FACE COMPARISON
-        // =========================================================
-
-        private bool CompareFaces(
-            string imagePath,
-            string registeredImagePath)
-        {
-            // TEMPORARY TESTING
-            //
-            // IMPORTANT:
-            // This currently returns true for testing only.
-            //
-            // Later actual face recognition logic
-            // should be implemented here.
-
-            return false;
-        }
-
-
-        // =========================================================
-        // CREATE ATTENDANCE
-        // =========================================================
-
-        private async Task CreateAttendance(
             AppDbContext context,
+
             UserModel user,
-            string imagePath)
+
+            string imagePath,
+
+            double similarity)
         {
-            DateTime now = DateTime.Now;
+            DateTime now =
+                DateTime.Now;
 
 
-            // Check duplicate attendance today
+            // =================================================
+            // CHECK TODAY DUPLICATE
+            // =================================================
+
             bool alreadyMarked =
                 await context.Attendance
                     .AnyAsync(x =>
                         x.UserId == user.Id &&
-                        x.AttendanceTime >= now.Date &&
+
+                        x.AttendanceTime >=
+                            now.Date &&
+
                         x.AttendanceTime <
                             now.Date.AddDays(1)
                     );
@@ -408,7 +603,7 @@ namespace CameraAttendance.Services
             if (alreadyMarked)
             {
                 _logger.LogInformation(
-                    "Attendance already marked for {Name}",
+                    "Attendance already marked today for {Name}",
                     user.Name
                 );
 
@@ -416,7 +611,10 @@ namespace CameraAttendance.Services
             }
 
 
-            // Attendance folder
+            // =================================================
+            // ATTENDANCE FOLDER
+            // =================================================
+
             string attendanceFolder =
                 Path.Combine(
                     _environment.WebRootPath,
@@ -425,57 +623,75 @@ namespace CameraAttendance.Services
                 );
 
 
-            if (!Directory.Exists(
-                attendanceFolder))
-            {
-                Directory.CreateDirectory(
-                    attendanceFolder);
-            }
+            Directory.CreateDirectory(
+                attendanceFolder
+            );
 
 
-            // Safe user name
+            // =================================================
+            // SAFE USER NAME
+            // =================================================
+
             string safeName =
-                user.Name
-                    .Replace(" ", "_");
+                MakeSafeFileName(
+                    user.Name
+                );
 
 
             string extension =
-                Path.GetExtension(imagePath);
+                Path.GetExtension(
+                    imagePath
+                );
 
-            if (string.IsNullOrEmpty(extension))
+
+            if (string.IsNullOrWhiteSpace(
+                extension))
             {
                 extension = ".jpg";
             }
 
 
+            // =================================================
+            // FILE NAME
+            // =================================================
+
             string fileName =
-                $"{safeName}_{now:yyyyMMdd_HHmmss}{extension}";
+                $"{safeName}_{now:yyyyMMdd_HHmmssfff}{extension}";
 
 
-            string attendanceImage =
+            string destinationPath =
                 Path.Combine(
                     attendanceFolder,
                     fileName
                 );
 
 
-            // Copy matched image
+            // =================================================
+            // COPY ONLY MATCHED IMAGE
+            // =================================================
+
             File.Copy(
                 imagePath,
-                attendanceImage,
+                destinationPath,
                 true
             );
 
 
-            // Create Attendance
+            // =================================================
+            // DATABASE
+            // =================================================
+
             var attendance =
                 new AttendanceModel
                 {
-                    UserId = user.Id,
+                    UserId =
+                        user.Id,
 
-                    UserName = user.Name,
+                    UserName =
+                        user.Name,
 
-                    AttendanceTime = now,
+                    AttendanceTime =
+                        now,
 
                     ImagePath =
                         $"/uploads/attendance/{fileName}"
@@ -483,22 +699,191 @@ namespace CameraAttendance.Services
 
 
             context.Attendance.Add(
-                attendance);
+                attendance
+            );
 
 
             await context.SaveChangesAsync();
 
 
             _logger.LogInformation(
-                "Attendance marked for {Name} at {Time}",
-                user.Name,
-                now
+                "========================================"
+            );
+
+            _logger.LogInformation(
+                "KNOWN USER ATTENDANCE SAVED"
+            );
+
+            _logger.LogInformation(
+                "User       : {Name}",
+                user.Name
+            );
+
+            _logger.LogInformation(
+                "UserId     : {Id}",
+                user.Id
+            );
+
+            _logger.LogInformation(
+                "Similarity : {Similarity:F4}",
+                similarity
+            );
+
+            _logger.LogInformation(
+                "Image      : {Image}",
+                destinationPath
+            );
+
+            _logger.LogInformation(
+                "========================================"
             );
         }
 
 
         // =========================================================
-        // WAIT UNTIL FILE UPLOAD COMPLETES
+        // STRANGER ATTENDANCE
+        // =========================================================
+
+        private async Task CreateStrangerAttendance(
+            AppDbContext context,
+
+            string imagePath,
+
+            double similarity = 0)
+        {
+            DateTime now =
+                DateTime.Now;
+
+
+            // =================================================
+            // STRANGER FOLDER
+            // =================================================
+
+            string strangerFolder =
+                Path.Combine(
+                    _environment.WebRootPath,
+                    "uploads",
+                    "strangers"
+                );
+
+
+            Directory.CreateDirectory(
+                strangerFolder
+            );
+
+
+            // =================================================
+            // FILE NAME
+            // =================================================
+
+            string fileName =
+                $"Stranger_{now:yyyyMMdd_HHmmssfff}.jpg";
+
+
+            string destinationPath =
+                Path.Combine(
+                    strangerFolder,
+                    fileName
+                );
+
+
+            // =================================================
+            // COPY STRANGER IMAGE
+            // =================================================
+
+            File.Copy(
+                imagePath,
+                destinationPath,
+                true
+            );
+
+
+            // =================================================
+            // DATABASE
+            // =================================================
+
+            var stranger =
+                new StrangerAttendanceModel
+                {
+                    UserId = 0,
+
+                    UserName = "Stranger",
+
+                    AttendanceTime = now,
+
+                    ImagePath =
+                        $"/uploads/strangers/{fileName}"
+                };
+
+
+            context.StrangerAttendance.Add(
+                stranger
+            );
+
+
+            await context.SaveChangesAsync();
+
+
+            _logger.LogWarning(
+                "========================================"
+            );
+
+            _logger.LogWarning(
+                "STRANGER ATTENDANCE SAVED"
+            );
+
+            _logger.LogWarning(
+                "Similarity : {Similarity:F4}",
+                similarity
+            );
+
+            _logger.LogWarning(
+                "Image      : {Image}",
+                destinationPath
+            );
+
+            _logger.LogWarning(
+                "========================================"
+            );
+        }
+
+
+        // =========================================================
+        // SAFE FILE NAME
+        // =========================================================
+
+        private string MakeSafeFileName(
+            string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return "User";
+            }
+
+
+            foreach (
+                char c in
+                Path.GetInvalidFileNameChars())
+            {
+                name =
+                    name.Replace(
+                        c,
+                        '_'
+                    );
+            }
+
+
+            return name
+                .Trim()
+                .Replace(
+                    " ",
+                    "_"
+                );
+        }
+
+
+        // =========================================================
+        // WAIT FOR FTP UPLOAD
         // =========================================================
 
         private async Task WaitForFile(
@@ -511,30 +896,39 @@ namespace CameraAttendance.Services
             {
                 try
                 {
-                    if (!File.Exists(filePath))
+                    if (!File.Exists(
+                        filePath))
                     {
                         await Task.Delay(1000);
+
                         continue;
                     }
 
 
                     FileInfo fileInfo =
-                        new FileInfo(filePath);
+                        new FileInfo(
+                            filePath
+                        );
 
 
                     long currentSize =
                         fileInfo.Length;
 
 
-                    // Same size for two checks
+                    // =============================================
+                    // FILE SIZE STABLE
+                    // =============================================
+
                     if (currentSize > 0 &&
-                        currentSize == previousSize)
+                        currentSize ==
+                            previousSize)
                     {
                         return;
                     }
 
 
-                    previousSize = currentSize;
+                    previousSize =
+                        currentSize;
                 }
                 catch (IOException)
                 {

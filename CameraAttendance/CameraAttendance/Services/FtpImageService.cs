@@ -81,6 +81,8 @@ namespace CameraAttendance.Services
 
         //        return $"Processed successfully. Indoor: {indoorCount}, Outdoor: {outdoorCount}";
         //    }
+
+
         private readonly IWebHostEnvironment environment;
 
         public FtpImageService(IWebHostEnvironment envi)
